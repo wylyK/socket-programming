@@ -47,7 +47,8 @@ def start():
     try:
         while True:
             expression, address = serverSocket.recvfrom(1024)
-            statusCode, result = calculate(expression.decode())
+            expression = expression.decode()
+            statusCode, result = calculate(expression)
             extendedResult = statusCode + " " + result
             serverSocket.sendto(extendedResult.encode(), address)
             print(expression + " -> " + extendedResult)
