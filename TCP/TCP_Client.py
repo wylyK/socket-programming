@@ -1,6 +1,9 @@
 import sys
 from socket import *
 
+if len(sys.argv) < 2:
+    print("Expecting input file!")
+
 fileName = sys.argv[1]
 name = "localhost"
 port = 50001
