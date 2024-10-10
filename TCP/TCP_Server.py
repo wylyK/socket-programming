@@ -1,15 +1,18 @@
 from socket import *
+def isntWhiteSpace(letter):
+    return letter != ""
 
 def calculate(expression):
-    prefixExpression = expression.split(" ")
-    operator = prefixExpression[0]
+    expression = expression.split(" ")
+    expression = list(filter(isntWhiteSpace, expression))
+    operator = expression[0]
 
     statusCode = "200"
     result = "-1"
 
     try:
-        x = int(prefixExpression[1])
-        y = int(prefixExpression[2])
+        x = int(expression[1])
+        y = int(expression[2])
     except:
         x = 1
         y = 1

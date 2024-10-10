@@ -11,9 +11,11 @@ else:
 
     with open(fileName, 'r') as file:
         for line in file:
+            line = line.strip()
+            print("Input request: " + line)
             clientSocket = socket(AF_INET, SOCK_STREAM)
             clientSocket.connect((name, port))
-            clientSocket.send(line.strip().encode())
+            clientSocket.send(line.encode())
             result = clientSocket.recv(1024).decode()
 
     clientSocket.close()
