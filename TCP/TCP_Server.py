@@ -1,11 +1,19 @@
 from socket import *
 
 def calculate(expression):
-    prefix = expression.split()
-    operator = prefix[0]
-    x = int(prefix[1])
-    y = int(prefix[2])
-    result = ""
+    prefixExpression = expression.split(" ")
+    operator = prefixExpression[0]
+
+    statusCode = "200"
+    result = "-1"
+
+    try:
+        x = int(prefixExpression[1])
+        y = int(prefixExpression[2])
+    except:
+        x = 1
+        y = 1
+        statusCode = "630"
 
     match operator:
         case "+":
@@ -15,9 +23,18 @@ def calculate(expression):
         case "*":
             result = str(x * y)
         case "/":
-            result = str(x / y)
+            if y == 0:
+                statusCode = "630"
+            else: 
+                result = str(x / y)            
+        case _:
+            result = "-1"
+            statusCode = "620"
 
-    return result
+    if statusCode == "630":
+        result = "-1"
+
+    return statusCode, result
 
 def start():
     port = 50001
@@ -29,8 +46,11 @@ def start():
         while True:
             connectionSocket, _ = serverSocket.accept()
             expression = connectionSocket.recv(1024).decode()
-            result = calculate(expression)
-            connectionSocket.send(result.encode())
+            statusCode, result = calculate(expression)
+            extendedResult = statusCode + " " + result
+            connectionSocket.send(extendedResult.encode())
+            print(expression + " -> " + extendedResult)
+            connectionSocket.close()
         
     except KeyboardInterrupt:
         serverSocket.close()
