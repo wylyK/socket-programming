@@ -2,7 +2,7 @@ import sys
 from socket import *
 
 fileName = sys.argv[1]
-name = 'hostname'
+name = "localhost"
 port = 50001
 
 clientSocket = socket(AF_INET, SOCK_STREAM)
@@ -14,6 +14,3 @@ with open(fileName, 'r') as file:
         result = clientSocket.recv(1024).decode()
 
 clientSocket.close()
-    
-
-
