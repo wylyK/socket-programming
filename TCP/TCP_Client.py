@@ -9,7 +9,7 @@ with open(fileName, 'r') as file:
     for line in file:
         clientSocket = socket(AF_INET, SOCK_STREAM)
         clientSocket.connect((name, port))
-        clientSocket.send(line.encode())
+        clientSocket.send(line.strip().encode())
         result = clientSocket.recv(1024).decode()
 
 clientSocket.close()
