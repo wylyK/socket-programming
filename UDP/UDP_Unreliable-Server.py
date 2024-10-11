@@ -1,7 +1,16 @@
+import sys
+import random
 from socket import *
 
+p = sys.argv[1]
+random.seed(sys.argv[2])
+
+def isntWhiteSpace(letter):
+    return letter != ""
+
 def calculate(expression):
-    expression = expression.split()
+    expression = expression.split(" ")
+    expression = list(filter(isntWhiteSpace, expression))
     operator = expression[0]
 
     statusCode = "200"
@@ -40,21 +49,20 @@ def start():
     port = 50001
     serverSocket = socket(AF_INET, SOCK_DGRAM)
     serverSocket.bind(("", port))
-    serverSocket.timeout(0.5)
 
     try:
         while True:
-            try:
-                expression, address = serverSocket.recvfrom(1024)
-                expression = expression.decode()
+            serverSocket.listen(1)
+            expression, address = serverSocket.recvfrom(1024)
+            expression = expression.decode()
+            if random.random() <= p:
                 statusCode, result = calculate(expression)
                 extendedResult = statusCode + " " + result
                 serverSocket.sendto(extendedResult.encode(), address)
                 print(expression + " -> " + extendedResult)
-            except serverSocket.timeout:
-                pass
+            else:
+                print(expression + " -> " + "dropped")
     except KeyboardInterrupt:
         serverSocket.close()
-        
 
 start()
