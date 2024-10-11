@@ -2,15 +2,19 @@ import sys
 import random
 from socket import *
 
-p = sys.argv[1]
+if len(sys.argv) == 1:
+    print("Expecting numeric probability and seed!")
+    exit()
+
+elif len(sys.argv) == 2:
+    print("Expecting seed!")
+    exit()
+
+p = float(sys.argv[1])
 random.seed(sys.argv[2])
 
-def isntWhiteSpace(letter):
-    return letter != ""
-
 def calculate(expression):
-    expression = expression.split(" ")
-    expression = list(filter(isntWhiteSpace, expression))
+    expression = expression.split()
     operator = expression[0]
 
     statusCode = "200"
@@ -49,19 +53,20 @@ def start():
     port = 50001
     serverSocket = socket(AF_INET, SOCK_DGRAM)
     serverSocket.bind(("", port))
-
+    
     try:
         while True:
-            serverSocket.listen(1)
             expression, address = serverSocket.recvfrom(1024)
             expression = expression.decode()
+            message = ""
             if random.random() <= p:
-                statusCode, result = calculate(expression)
-                extendedResult = statusCode + " " + result
-                serverSocket.sendto(extendedResult.encode(), address)
-                print(expression + " -> " + extendedResult)
+                message = "dropped"
             else:
-                print(expression + " -> " + "dropped")
+                statusCode, result = calculate(expression)
+                message = statusCode + " " + result
+                serverSocket.sendto(message.encode(), address)
+
+            print(expression + " -> " + message)
     except KeyboardInterrupt:
         serverSocket.close()
 

@@ -1,6 +1,6 @@
 from socket import *
 
-def calculate(expression):
+def calculate(expression: str):
     expression = expression.split()
     operator = expression[0]
 
@@ -40,21 +40,20 @@ def start():
     port = 50001
     serverSocket = socket(AF_INET, SOCK_DGRAM)
     serverSocket.bind(("", port))
-    serverSocket.timeout(0.5)
-
+    
     try:
         while True:
-            try:
-                expression, address = serverSocket.recvfrom(1024)
-                expression = expression.decode()
-                statusCode, result = calculate(expression)
-                extendedResult = statusCode + " " + result
-                serverSocket.sendto(extendedResult.encode(), address)
+            expression, address = serverSocket.recvfrom(1024)
+            expression = expression.decode()
+            statusCode, result = calculate(expression)
+            extendedResult = statusCode + " " + result
+            serverSocket.sendto(extendedResult.encode(), address)
+            
+            if statusCode == "200":
                 print(expression + " -> " + extendedResult)
-            except serverSocket.timeout:
-                pass
+
     except KeyboardInterrupt:
+        print("\nServer terminated")
         serverSocket.close()
         
-
 start()
