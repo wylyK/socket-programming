@@ -68,6 +68,7 @@ def start():
 
             print(expression + " -> " + message)
     except KeyboardInterrupt:
+        print("\nServer Terminated")
         serverSocket.close()
 
 start()
