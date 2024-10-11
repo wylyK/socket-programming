@@ -52,10 +52,14 @@ def start():
             statusCode, result = calculate(expression)
             extendedResult = statusCode + " " + result
             connectionSocket.send(extendedResult.encode())
-            print(expression + " -> " + extendedResult)
+
+            if statusCode == "200":
+                print(expression + " -> " + extendedResult)
+                
             connectionSocket.close()
         
     except KeyboardInterrupt:
+        print("\nServer Terminated")
         serverSocket.close()
 
 start()

@@ -22,10 +22,10 @@ else:
 
             match statusCode:
                 case "200":
-                    print(result)
+                    print("The result is: " + result)
                 case "620":
-                    print("Invalid operator!")
+                    print("Error " + statusCode + ": Invalid operator!")
                 case "630":
-                    print("Invalid operands!")
+                    print("Error " + statusCode + ": Invalid operands!")
 
-    clientSocket.close()
+            clientSocket.close()
